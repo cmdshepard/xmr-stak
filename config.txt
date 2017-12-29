@@ -13,7 +13,15 @@
  */
 "pool_list" :
 [
-	{"pool_address" : "xmr-us-east1.nanopool.org:14444", "wallet_address" : "4B45ooEyK62eYDka9zqaUbP1AV5BMNuib1ndqzCYVBF9WNqKxdJDvj5HeJxFcJ6N2dNGLfEdkuuta7455Ysbk27fN1iq6vV.barcelona", "pool_password" : "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },
+	{
+    "pool_address" : "pool.supportxmr.com:3333",
+    "wallet_address" : "4B45ooEyK62eYDka9zqaUbP1AV5BMNuib1ndqzCYVBF9WNqKxdJDvj5HeJxFcJ6N2dNGLfEdkuuta7455Ysbk27fN1iq6vV",
+    "pool_password" : "worker:hello@maziar.io",
+    "use_nicehash" : false,
+    "use_tls" : false,
+    "tls_fingerprint" : "",
+    "pool_weight" : 1
+  },
 ],
 
 /*
