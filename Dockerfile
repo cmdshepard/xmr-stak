@@ -1,26 +1,18 @@
-# Latest version of ubuntu
-FROM nvidia/cuda:9.0-base
+FROM ubuntu:16.04
 
-# Default git repository
-ENV GIT_REPOSITORY https://github.com/fireice-uk/xmr-stak.git
-ENV XMRSTAK_CMAKE_FLAGS -DXMR-STAK_COMPILE=generic -DCUDA_ENABLE=ON -DOpenCL_ENABLE=OFF
+RUN apt-get -y update && apt-get install -y libmicrohttpd-dev vim tmux libssl-dev cmake build-essential libhwloc-dev git
 
-# Innstall packages
-RUN apt-get update \
-    && set -x \
-    && apt-get install -qq --no-install-recommends -y ca-certificates cmake cuda-core-9-0 git cuda-cudart-dev-9-0 libhwloc-dev libmicrohttpd-dev libssl-dev \
-    && git clone $GIT_REPOSITORY \
-    && cd /xmr-stak \
-    && cmake ${XMRSTAK_CMAKE_FLAGS} . \
-    && make \
-    && cd - \
-    && mv /xmr-stak/bin/* /usr/local/bin/ \
-    && rm -rf /xmr-stak \
-    && apt-get purge -y -qq cmake cuda-core-9-0 git cuda-cudart-dev-9-0 libhwloc-dev libmicrohttpd-dev libssl-dev \
-    && apt-get clean -qq
+WORKDIR /root/xmr-stak/
 
-VOLUME /mnt
+COPY . .
 
-WORKDIR /mnt
+RUN mkdir ./build && \
+  cd ./build && \
+  cmake -DCUDA_ENABLE=OFF -DOpenCL_ENABLE=OFF .. && \
+  make install && \
+  cp /root/xmr-stak/config.txt /root/xmr-stak/build/bin/config.txt && \
+  sysctl -w vm.nr_hugepages=128 && \
+  echo "* soft memlock 262144" >> /etc/security/limits.conf && \
+  echo "* hard memlock 262144" >> /etc/security/limits.con
 
-ENTRYPOINT ["/usr/local/bin/xmr-stak"]
+CMD ["/root/xmr-stak/build/bin/xmr-stak"]
